@@ -13,7 +13,7 @@
 		"run_worker_first": true
 	},
 	"vars": {
-		"RAG_ID": "my-autorag-id"
+		"RAG_ID": "red-hill-26ef"
 	},
 	"ai": {
 		"binding": "AI"
