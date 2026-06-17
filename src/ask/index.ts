@@ -4,6 +4,20 @@ import { StreamingWrapper } from "./stream-wrapper";
 import type { ResultBatch, MessageResponse, Params } from "./types";
 import { summarize, summarizeStreaming } from "./summarize";
 
+export const getRag = (env: Env, ragId: string) =>
+	({
+		search: async ({ query }: { query: string }) => {
+			const res = await env.AI_SEARCH.get(ragId).search({ query });
+			return {
+				data: res.chunks.map((c) => ({
+					filename: c.item?.key ?? c.id,
+					score: c.score,
+					content: [{ text: c.text }],
+				})),
+			};
+		},
+	}) as unknown as AutoRAG;
+
 // mode : list, summarize, generate, none
 export const handleAsk = async (
 	request: Request,
@@ -29,7 +43,7 @@ export const handleAsk = async (
 		}
 	}
 
-	const rag = env.AI.autorag(ragId);
+	const rag = getRag(env, ragId);
 
 	if (
 		params.streaming !== "false" ||

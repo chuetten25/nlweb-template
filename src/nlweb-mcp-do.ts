@@ -1,7 +1,7 @@
 import { McpAgent } from "agents/mcp";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { handleDefault } from "./ask";
+import { handleDefault, getRag } from "./ask";
 
 export class NLWebMcp extends McpAgent<Env> {
 	server = new McpServer({ name: "Search Agent", version: "1.0.0" });
@@ -27,7 +27,7 @@ export class NLWebMcp extends McpAgent<Env> {
 				}
 
 				const res = await handleDefault(
-					this.env.AI.autorag(this.props.ragId),
+					getRag(this.env, this.props.ragId),
 					{ query, generate_mode },
 					this.env,
 				);
